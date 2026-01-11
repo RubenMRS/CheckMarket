@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "694917584508",
+    "project_id": "checkmarket-defa4",
+    "storage_bucket": "checkmarket-defa4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694917584508:android:90996a1717082829a4dbf9",
+        "android_client_info": {
+          "package_name": "com.example.checkmarket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWnZw6YhvTOlk1Aq30YAXeIIR5dUcvYDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
