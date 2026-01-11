@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Cores Primárias -->
-    <color name="primary">#3498db</color>
-    <color name="primary_dark">#2980b9</color>
-    <color name="primary_light">#8ecae6</color>
+    <!-- Cores base da App (Modo Claro) -->
+    <color name="primary">#4CAF50</color> <!-- Verde Principal -->
+    <color name="on_primary">#FFFFFF</color> <!-- Texto/Ícones em cima do Verde Principal -->
+    <color name="primary_dark">#388E3C</color> <!-- Variação mais escura do Verde -->
 
-    <!-- Cores Secundárias -->
-    <color name="secondary">#9b59b6</color>
-    <color name="secondary_dark">#8e44ad</color>
-    <color name="secondary_light">#be9add</color>
+    <color name="secondary">#FFC107</color> <!-- Amarelo Secundário -->
+    <color name="on_secondary">#000000</color> <!-- Texto/Ícones em cima do Amarelo -->
+    <color name="secondary_dark">#FFA000</color> <!-- Variação mais escura do Amarelo -->
 
-    <!-- Cores de Fundo e Superfície -->
-    <color name="background">#f4f6f7</color>
-    <color name="surface">#ffffff</color>
+    <color name="background">#F7F7F7</color> <!-- Fundo da App -->
+    <color name="surface">#FFFFFF</color> <!-- Cor dos "cards", "sheets", menus -->
+    <color name="on_surface">#000000</color> <!-- Cor do texto em cima do "surface" -->
 
-    <!-- Cores de Texto -->
-    <color name="on_primary">#ffffff</color>
-    <color name="on_secondary">#ffffff</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <color name="error">#D32F2F</color>
 
-    <!-- Cor de Erro -->
-    <color name="error">#e74c3c</color>
-
-    <!-- Outras Cores -->
-    <color name="black">#000000</color>
+    <!-- Cores genéricas -->
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Cor customizada para o chip -->
+    <color name="chip_background_color">#1F000000</color> <!-- Cor preta com 12% de opacidade -->
 </resources>

@@ -47,24 +47,55 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilQuantidade"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            <!-- Layout para Quantidade e Preço lado a lado -->
+            <LinearLayout
+                android:id="@+id/linearLayoutQuantidadePreco"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Quantidade"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilNome">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editQuantidade"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilQuantidade"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:hint="Quantidade">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editQuantidade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPreco"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_euro"
+                    android:hint="Preço">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editPreco"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCategoria"
@@ -75,7 +106,7 @@
                 android:hint="Categoria"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilQuantidade">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutQuantidadePreco">
 
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteCategoria"

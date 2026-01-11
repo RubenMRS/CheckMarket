@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.checkmarket.databinding.ActivityFormularioBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Locale
 
 class FormularioActivity : AppCompatActivity() {
 
@@ -52,7 +53,9 @@ class FormularioActivity : AppCompatActivity() {
             binding.toolbar.title = "Editar Produto"
             binding.editNome.setText(produtoEditar?.nome)
             binding.editQuantidade.setText(produtoEditar?.quantidade.toString())
-            binding.autoCompleteCategoria.setText(produtoEditar?.categoria, false) // false para não filtrar a lista
+            // Formata o preço para o locale do telemóvel (ex: 1,50 ou 1.50)
+            binding.editPreco.setText(String.format(Locale.getDefault(), "%.2f", produtoEditar?.preco))
+            binding.autoCompleteCategoria.setText(produtoEditar?.categoria, false)
             binding.btnSalvar.text = "Atualizar Produto"
         }
     }
@@ -61,37 +64,58 @@ class FormularioActivity : AppCompatActivity() {
         binding.btnSalvar.setOnClickListener {
             val nome = binding.editNome.text.toString().trim()
             val quantidadeStr = binding.editQuantidade.text.toString().trim()
+            val precoStr = binding.editPreco.text.toString().trim().replace(',', '.') // Aceita vírgula e ponto
             val categoria = binding.autoCompleteCategoria.text.toString().trim()
 
-            if (validateInput(nome, quantidadeStr, categoria)) {
-                val quantidade = quantidadeStr.toInt() // Conversão para Int
-                salvarOuAtualizarProduto(nome, quantidade, categoria)
+            if (validateInput(nome, quantidadeStr, precoStr, categoria)) {
+                val quantidade = quantidadeStr.toInt()
+                val preco = precoStr.toDouble()
+                salvarOuAtualizarProduto(nome, quantidade, preco, categoria)
             }
         }
     }
 
-    private fun validateInput(nome: String, quantidade: String, categoria: String): Boolean {
+    private fun validateInput(nome: String, quantidadeStr: String, precoStr: String, categoria: String): Boolean {
         var isValid = true
+        // Validação do Nome
         if (nome.isEmpty()) {
-            binding.tilNome.error = "O nome do produto é obrigatório."
+            binding.tilNome.error = "O nome é obrigatório."
             isValid = false
         } else {
             binding.tilNome.error = null
         }
 
-        if (quantidade.isEmpty()) {
-            binding.tilQuantidade.error = "A quantidade é obrigatória."
-            isValid = false
-        } else {
-            try {
-                quantidade.toInt()
-                binding.tilQuantidade.error = null
-            } catch (e: NumberFormatException) {
-                binding.tilQuantidade.error = "Quantidade inválida."
+        // Validação da Quantidade
+        try {
+            val qtd = quantidadeStr.toInt()
+            if (qtd <= 0) {
+                binding.tilQuantidade.error = "Deve ser > 0"
                 isValid = false
+            } else {
+                binding.tilQuantidade.error = null
             }
+        } catch (e: NumberFormatException) {
+            binding.tilQuantidade.error = "Inválida"
+            isValid = false
         }
 
+        // Validação do Preço
+        try {
+            if (precoStr.isNotEmpty()) {
+                val preco = precoStr.toDouble()
+                if (preco < 0) {
+                    binding.tilPreco.error = "Inválido"
+                    isValid = false
+                } else {
+                    binding.tilPreco.error = null
+                }
+            }
+        } catch (e: NumberFormatException) {
+            binding.tilPreco.error = "Inválido"
+            isValid = false
+        }
+
+        // Validação da Categoria
         if (categoria.isEmpty()) {
             binding.tilCategoria.error = "A categoria é obrigatória."
             isValid = false
@@ -102,56 +126,51 @@ class FormularioActivity : AppCompatActivity() {
         return isValid
     }
 
-    private fun salvarOuAtualizarProduto(nome: String, quantidade: Int, categoria: String) {
+    private fun salvarOuAtualizarProduto(nome: String, quantidade: Int, preco: Double, categoria: String) {
         showLoading(true)
 
         if (produtoEditar != null) {
-            // Atualizar produto existente
-            val produtoAtualizado = mapOf(
-                "nome" to nome,
-                "quantidade" to quantidade,
-                "categoria" to categoria,
+            // Atualiza o produto que já existe
+            val produtoAtualizado = produtoEditar!!.copy(
+                nome = nome,
+                quantidade = quantidade,
+                preco = preco,
+                categoria = categoria
             )
-            db.collection("produtos").document(produtoEditar!!.id)
-                .update(produtoAtualizado)
+            db.collection("produtos").document(produtoAtualizado.id).set(produtoAtualizado)
                 .addOnSuccessListener {
                     showLoading(false)
-                    Toast.makeText(this, "Produto atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Produto atualizado!", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 .addOnFailureListener {
                     showLoading(false)
-                    Toast.makeText(this, "Erro ao atualizar o produto.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Erro ao atualizar.", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            // Salvar novo produto
+            // Cria um novo produto
             val novoProduto = Produto(
-                id = "", // O ID será gerado pelo Firestore
                 nome = nome,
                 quantidade = quantidade,
+                preco = preco,
                 categoria = categoria,
-                comprado = false
+                comprado = false // Novos produtos nunca estão comprados
             )
             db.collection("produtos").add(novoProduto)
                 .addOnSuccessListener {
                     showLoading(false)
-                    Toast.makeText(this, "Produto adicionado com sucesso!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Produto adicionado!", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 .addOnFailureListener {
                     showLoading(false)
-                    Toast.makeText(this, "Erro ao adicionar o produto.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Erro ao adicionar.", Toast.LENGTH_SHORT).show()
                 }
         }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.btnSalvar.isEnabled = false
-        } else {
-            binding.progressBar.visibility = View.GONE
-            binding.btnSalvar.isEnabled = true
-        }
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.btnSalvar.isEnabled = !isLoading
     }
 }
