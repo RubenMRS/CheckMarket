@@ -1,20 +1,18 @@
-package com.example.checkmarket // Confirme se o pacote é o seu mesmo
+package com.example.checkmarket
 
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.ImageButton
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 class ProdutoAdapter(
-    private val listaProdutos: MutableList<Produto>,
-    private val onProdutoCheck: (Produto) -> Unit,
-    private val onDeletarClick: (Produto) -> Unit,
     private val onEditarClick: (Produto) -> Unit
-) : RecyclerView.Adapter<ProdutoAdapter.ProdutoViewHolder>() {
+) : ListAdapter<Produto, ProdutoAdapter.ProdutoViewHolder>(ProdutoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProdutoViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -22,42 +20,49 @@ class ProdutoAdapter(
         return ProdutoViewHolder(view)
     }
 
-    override fun getItemCount(): Int = listaProdutos.size
-
     override fun onBindViewHolder(holder: ProdutoViewHolder, position: Int) {
-        val produto = listaProdutos[position]
+        val produto = getItem(position)
+        holder.bind(produto, onEditarClick)
+    }
 
-        holder.txtNome.text = produto.nome
-        holder.txtDetalhes.text = "${produto.quantidade} - ${produto.categoria}"
-
-        holder.cbComprado.setOnCheckedChangeListener(null)
-        holder.cbComprado.isChecked = produto.comprado
-
-        if (produto.comprado) {
-            holder.txtNome.paintFlags = holder.txtNome.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-        } else {
-            holder.txtNome.paintFlags = holder.txtNome.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-        }
-
-
-        holder.cbComprado.setOnClickListener {
-            produto.comprado = holder.cbComprado.isChecked
-            onProdutoCheck(produto)
-        }
-
-        holder.btnDeletar.setOnClickListener {
-            onDeletarClick(produto)
-        }
-
-        holder.itemView.setOnClickListener {
-            onEditarClick(produto)
-        }
+    public override fun getItem(position: Int): Produto {
+        return super.getItem(position)
     }
 
     class ProdutoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val txtNome: TextView = itemView.findViewById(R.id.txtNomeProduto)
-        val txtDetalhes: TextView = itemView.findViewById(R.id.txtDetalhesProduto)
-        val cbComprado: CheckBox = itemView.findViewById(R.id.cbComprado)
-        val btnDeletar: ImageButton = itemView.findViewById(R.id.btnDeletar)
+        private val txtNome: TextView = itemView.findViewById(R.id.txtNomeProduto)
+        private val txtDetalhes: TextView = itemView.findViewById(R.id.txtDetalhesProduto)
+        private val cbComprado: CheckBox = itemView.findViewById(R.id.cbComprado)
+
+        fun bind(
+            produto: Produto,
+            onEditarClick: (Produto) -> Unit
+        ) {
+            txtNome.text = produto.nome
+            txtDetalhes.text = "${produto.quantidade} - ${produto.categoria}"
+
+            cbComprado.isChecked = produto.comprado
+            cbComprado.isClickable = false // Apenas para visualização
+
+            if (produto.comprado) {
+                txtNome.paintFlags = txtNome.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                txtNome.paintFlags = txtNome.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
+
+            itemView.setOnClickListener {
+                onEditarClick(produto)
+            }
+        }
+    }
+}
+
+class ProdutoDiffCallback : DiffUtil.ItemCallback<Produto>() {
+    override fun areItemsTheSame(oldItem: Produto, newItem: Produto): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Produto, newItem: Produto): Boolean {
+        return oldItem == newItem
     }
 }

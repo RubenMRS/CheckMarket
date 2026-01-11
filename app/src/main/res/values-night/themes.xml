@@ -1,7 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.CheckMarket" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-    </style>
+  <!-- Base application theme. -->
+  <style name="Theme.CheckMarket" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Primary brand color. -->
+    <item name="colorPrimary">@color/primary_dark</item>
+    <item name="colorOnPrimary">@color/on_primary</item>
+
+    <!-- Secondary brand color. -->
+    <item name="colorSecondary">@color/secondary_dark</item>
+    <item name="colorOnSecondary">@color/on_secondary</item>
+
+    <!-- Status bar color. -->
+    <item name="android:statusBarColor">@color/background</item>
+    <item name="android:windowLightStatusBar">false</item>
+
+    <!-- Background color. -->
+    <item name="android:colorBackground">#121212</item>
+    <item name="colorSurface">#1E1E1E</item>
+
+    <!-- Text colors -->
+    <item name="android:textColorPrimary">@color/white</item>
+    <item name="android:textColorSecondary">#BDBDBD</item>
+
+  </style>
 </resources>
