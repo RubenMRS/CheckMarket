@@ -33,29 +33,20 @@ app/src/main/java/com/example/checkmarket/
 ├── FormularioActivity.kt  # Interface de CRUD (Criar/Editar produtos)
 ├── Produto.kt             # Data Class (Modelo de dados serializável)
 └── ProdutoAdapter.kt      # Lógica de renderização e animações da lista
-🚀 Como Executar
-Clonar o projeto:
+```
+## **🚀 Como Executar**
 
-Bash
+* **Clonar o projeto:**
+    ```bash
+    git clone [https://github.com/RubenMRS/CheckMarket.git](https://github.com/RubenMRS/CheckMarket.git)
+    ```
 
-git clone [https://github.com/RubenMRS/CheckMarket.git](https://github.com/RubenMRS/CheckMarket.git)
-Configuração do Firebase:
+* **Configuração do Firebase:**
+    * Cria um projeto no [Console do Firebase](https://console.firebase.google.com/).
+    * Descarrega o ficheiro `google-services.json` e coloca-o na diretoria `app/`.
 
-Cria um projeto no Console do Firebase.
+* **Android Studio:**
+    * Abre o projeto e aguarda a sincronização do **Gradle**.
+    * Executa no teu dispositivo ou emulador (**Min SDK 24**).
 
-Descarrega o ficheiro google-services.json e coloca-o na diretoria app/.
-
-Android Studio:
-
-Abre o projeto e aguarda a sincronização do Gradle.
-
-Executa no teu dispositivo ou emulador (Min SDK 24).
-
-📄 Boas Práticas Implementadas
-Modularidade: Separação clara entre modelos de dados, adaptadores e atividades.
-
-Segurança de Dados: Uso de ViewBinding para evitar o antigo findViewById.
-
-Interatividade: Feedback visual imediato através de Toast, SnackBar e animações de lista.
-
-Desenvolvido por RubenMRS.
+Autor: Ruben Silva
